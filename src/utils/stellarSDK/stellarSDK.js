@@ -1,0 +1,84 @@
+const StellarSdk = require("stellar-sdk");
+
+export const registerUserInBlockchain = async () => {
+  const pair = StellarSdk.Keypair.random();
+  const publicKey = pair.publicKey();
+
+  try {
+    const response = await fetch(
+      `https://friendbot.stellar.org?addr=${encodeURIComponent(publicKey)}`
+    );
+    const responseJSON = await response.json();
+    console.log("SUCCESS! You have a new account :)\n", responseJSON);
+    return [pair, publicKey];
+  } catch (e) {
+    console.error("Error creating test account!", e);
+  }
+};
+
+export const sendPayment = async (
+  sourceSecretKey,
+  destinationPublicKey,
+  amount
+) => {
+  const server = new StellarSdk.Horizon.Server(
+    "https://horizon-testnet.stellar.org"
+  );
+  const sourceKeypair = StellarSdk.Keypair.fromSecret(sourceSecretKey);
+  const sourcePublicKey = sourceKeypair.publicKey();
+
+  try {
+    const account = await server.loadAccount(sourcePublicKey);
+    const fee = await server.fetchBaseFee();
+
+    const transaction = new StellarSdk.TransactionBuilder(account, {
+      fee,
+      networkPassphrase: StellarSdk.Networks.TESTNET,
+    })
+      .addOperation(
+        StellarSdk.Operation.payment({
+          destination: destinationPublicKey,
+          asset: StellarSdk.Asset.native(),
+          amount: amount.toString(),
+        })
+      )
+      .setTimeout(30)
+      .build();
+
+    transaction.sign(sourceKeypair);
+    const result = await server.submitTransaction(transaction);
+    console.log("Success! Results:", result);
+  } catch (e) {
+    console.error("An error has occured sending payment", e);
+  }
+};
+
+export const fetchDonationHistory = async (sourcePublicKey) => {
+  const server = new StellarSdk.Horizon.Server(
+    "https://horizon-testnet.stellar.org"
+  );
+  try {
+    const account = await server.loadAccount(sourcePublicKey);
+
+    const transactions = await server
+      .transactions()
+      .forAccount(account.accountId())
+      .call();
+
+    return transactions?.records;
+  } catch (e) {
+    console.error("An error has occured fetching donation history", e);
+  }
+};
+
+export const fetchAccountDetails = async (publicKey) => {
+  try {
+    const server = new StellarSdk.Horizon.Server(
+      "https://horizon-testnet.stellar.org"
+    );
+    const account = await server.loadAccount(publicKey);
+    console.log(account);
+  } catch (e) {
+    console.error("An error has occured fetching account details", e);
+  }
+};
