@@ -1,5 +1,9 @@
 const StellarSdk = require("stellar-sdk");
 
+const server = new StellarSdk.Horizon.Server(
+  "https://horizon-testnet.stellar.org"
+);
+
 export const registerUserInBlockchain = async () => {
   const pair = StellarSdk.Keypair.random();
   const publicKey = pair.publicKey();
@@ -21,9 +25,6 @@ export const sendPayment = async (
   destinationPublicKey,
   amount
 ) => {
-  const server = new StellarSdk.Horizon.Server(
-    "https://horizon-testnet.stellar.org"
-  );
   const sourceKeypair = StellarSdk.Keypair.fromSecret(sourceSecretKey);
   const sourcePublicKey = sourceKeypair.publicKey();
 
@@ -54,9 +55,6 @@ export const sendPayment = async (
 };
 
 export const fetchDonationHistory = async (sourcePublicKey) => {
-  const server = new StellarSdk.Horizon.Server(
-    "https://horizon-testnet.stellar.org"
-  );
   try {
     const account = await server.loadAccount(sourcePublicKey);
 
@@ -81,4 +79,9 @@ export const fetchAccountDetails = async (publicKey) => {
   } catch (e) {
     console.error("An error has occured fetching account details", e);
   }
+};
+
+export const getContractAddress = () => {
+  // Replace with your actual contract address on the Stellar Testnet
+  return "GXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 };
