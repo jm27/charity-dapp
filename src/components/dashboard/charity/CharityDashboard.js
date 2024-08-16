@@ -4,26 +4,24 @@ import DonationsList from "../common/DonationsList";
 import { Link } from "react-router-dom";
 
 const CharityDashboard = () => {
-  const [charityPublicKey, setCharityPublicKey] = useState("");
+  const charityProfile = JSON.parse(localStorage.getItem("currentUser")) || {};
+  const [charityPublicKey] = useState(charityProfile.publicKey || "");
+  const [charityName] = useState(charityProfile.name || "");
   const [donationHistory, setDonationHistory] = useState([]);
 
   useEffect(() => {
     if (!charityPublicKey) return;
-    const donations = fetchDonationHistory(charityPublicKey);
-    setDonationHistory(donations);
+    const fetchHistory = async (charityPublicKey) => {
+      const donationHistory = await fetchDonationHistory(charityPublicKey);
+      setDonationHistory(donationHistory);
+    };
+    fetchHistory(charityPublicKey);
   }, [charityPublicKey]);
 
   return (
     <div>
-      <h1>Charity Dashboard</h1>
       <div>
-        <label>Charity Public Key:</label>
-        <input
-          type="text"
-          value={charityPublicKey}
-          onChange={(e) => setCharityPublicKey(e.target.value)}
-          placeholder="Charity Public Key"
-        />
+        <h2>Hello, {charityName}! Let's make an impact.</h2>
       </div>
       <Link to="/charity-profile">Edit Profile</Link>
       <h2>Received Donations</h2>

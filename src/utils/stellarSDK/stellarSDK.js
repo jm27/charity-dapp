@@ -69,6 +69,47 @@ export const fetchDonationHistory = async (sourcePublicKey) => {
   }
 };
 
+export const fetchOperationsForTransaction = async (transactionId) => {
+  const url = `https://horizon-testnet.stellar.org/transactions/${transactionId}/operations`;
+  const response = await fetch(url);
+  const operations = await response.json();
+
+  return operations._embedded.records;
+};
+
+export const extractTransactionDetails = async (transaction) => {
+  const operations = await fetchOperationsForTransaction(transaction.id);
+  const transactionDetails = {
+    id: transaction.id,
+    createdAt: transaction.created_at,
+    amount: 0,
+    to: "",
+    from: "",
+  };
+
+  operations.forEach((operation) => {
+    if (operation.type === "payment") {
+      transactionDetails.amount = operation.amount;
+      transactionDetails.to = operation.to;
+      transactionDetails.from = operation.from;
+    }
+  });
+
+  return transactionDetails;
+};
+
+export const fetchAccountBalance = async (publicKey) => {
+  try {
+    const account = await server.loadAccount(publicKey);
+    const balance = account.balances.find(
+      (balance) => balance.asset_type === "native"
+    );
+    return balance.balance;
+  } catch (e) {
+    console.error("An error has occured fetching account balance", e);
+  }
+};
+
 export const fetchAccountDetails = async (publicKey) => {
   try {
     const server = new StellarSdk.Horizon.Server(
@@ -79,9 +120,4 @@ export const fetchAccountDetails = async (publicKey) => {
   } catch (e) {
     console.error("An error has occured fetching account details", e);
   }
-};
-
-export const getContractAddress = () => {
-  // Replace with your actual contract address on the Stellar Testnet
-  return "GXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 };

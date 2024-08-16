@@ -15,8 +15,13 @@ function Register() {
     if (inputPublicKey) {
       registerUserInLocal(inputPublicKey);
     } else {
-      let [publicKey] = await registerUserInBlockchain();
-      registerUserInLocal(publicKey);
+      let [keyPair] = await registerUserInBlockchain();
+      alert(`Registered successfully! 
+        Your public key is ${keyPair.publicKey()}
+        Private key is ${keyPair.secret()}.
+        Please save these keys for future use.
+        Private key is not stored anywhere and cannot be recovered!`);
+      registerUserInLocal(keyPair.publicKey());
     }
     // Redirect to login page
     navigate("/login");

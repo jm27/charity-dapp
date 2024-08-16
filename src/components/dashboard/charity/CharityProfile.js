@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
-import {
-  fetchDonationHistory,
-  sendPayment,
-} from "../../../utils/stellarSDK/stellarSDK";
 
 const CharityProfile = () => {
-  const [charityPublicKey, setCharityPublicKey] = useState("");
+  const [charityPublicKey] = useState("");
   const [profile, setProfile] = useState({
     name: "",
     mission: "",
@@ -15,9 +11,6 @@ const CharityProfile = () => {
   });
 
   useEffect(() => {
-    // if (!charityPublicKey) return;
-    // const donations = fetchDonationHistory(charityPublicKey);
-    // setDonationHistory(donations);
     const fetchProfile = async (charityPublicKey) => {
       const mockProfile = {
         name: "Charity Name",

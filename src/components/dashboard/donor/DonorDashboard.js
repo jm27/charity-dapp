@@ -6,27 +6,15 @@ import {
 import DonationsList from "../common/DonationsList";
 
 const DonorDashboard = () => {
+  const donorProfile = JSON.parse(localStorage.getItem("currentUser")) || {};
   const [sourceSecretKey, setSourceSecretKey] = useState("");
   const [destinationPublicKey, setDestinationPublicKey] = useState("");
   const [amount, setAmount] = useState(0);
   const [donationHistory, setDonationHistory] = useState([]);
-  const [donorPublicKey, setDonorPublicKey] = useState(
-    "GCVQHCMYN3VSPDQQABK672A2OBDCU2W3BMSPKJ6XRXZF5PCITAOQGFDN"
-  );
+  const [donorPublicKey] = useState(donorProfile.publicKey || "");
+  const [donorName] = useState(donorProfile.name || "");
 
   useEffect(() => {
-    // const server = new StellarSdk.Horizon.Server(
-    //   "https://horizon-testnet.stellar.org"
-    // );
-    // // Example: Load account details
-    // const fetchAccount = async () => {
-    //   const account = await server.loadAccount("GB5..."); // TODO get account ID
-    //   console.log(account);
-    // };
-    // fetchAccount();
-    // if (hasEffectRun.current) return;
-    // hasEffectRun.current = true;
-    // sendPayment("S...", "G...", 100); // TODO: Add your source secret key and destination public key
     if (!donorPublicKey) return;
     const fetchHistory = async (donorPublicKey) => {
       const donationHisory = await fetchDonationHistory(donorPublicKey);
@@ -50,7 +38,7 @@ const DonorDashboard = () => {
 
   return (
     <div>
-      <h1>Donor Dashboard</h1>
+      <h2>Welcome, {donorName}! Ready to make a difference?</h2>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div>
           <label>Source Secret Key:</label>
@@ -71,7 +59,7 @@ const DonorDashboard = () => {
           />
         </div>
         <div>
-          <label>Amout</label>
+          <label>Amount</label>
           <input
             type="number"
             value={amount}
