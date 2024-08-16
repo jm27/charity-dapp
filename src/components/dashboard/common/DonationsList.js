@@ -30,12 +30,16 @@ const DonationsList = ({ donations }) => {
   return (
     <div>
       <ul>
-        {transactionDetails?.map((transaction, index) => (
-          <li key={index}>
-            {Number(transaction.amount).toFixed(2)} XLM from {transaction.from}{" "}
-            to {transaction.to} on {formatDate(transaction.createdAt)} UTC
-          </li>
-        ))}
+        {transactionDetails?.map(
+          (transaction, index) =>
+            Number(transaction.amount).toFixed(2) > 0 && (
+              <li key={index}>
+                {Number(transaction.amount).toFixed(2)} XLM from{" "}
+                {transaction.from} to {transaction.to} on{" "}
+                {formatDate(transaction.createdAt)} UTC
+              </li>
+            )
+        )}
       </ul>
     </div>
   );

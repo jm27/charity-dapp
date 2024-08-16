@@ -4,6 +4,7 @@ import {
   sendPayment,
 } from "../../../utils/stellarSDK/stellarSDK";
 import DonationsList from "../common/DonationsList";
+import useSubmitForm from "../../../hooks/useSubmitForm";
 
 const DonorDashboard = () => {
   const donorProfile = JSON.parse(localStorage.getItem("currentUser")) || {};
@@ -14,17 +15,7 @@ const DonorDashboard = () => {
   const [donorPublicKey] = useState(donorProfile.publicKey || "");
   const [donorName] = useState(donorProfile.name || "");
 
-  useEffect(() => {
-    if (!donorPublicKey) return;
-    const fetchHistory = async (donorPublicKey) => {
-      const donationHisory = await fetchDonationHistory(donorPublicKey);
-      setDonationHistory(donationHisory);
-    };
-    fetchHistory(donorPublicKey);
-  }, [donorPublicKey]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const submitDonation = async (e) => {
     if (!sourceSecretKey || !destinationPublicKey || !amount) {
       alert("Please fill all the fields");
       return;
@@ -36,10 +27,21 @@ const DonorDashboard = () => {
     await sendPayment(sourceSecretKey, destinationPublicKey, amount);
   };
 
+  const { isLoading, handleSubmit } = useSubmitForm(submitDonation);
+
+  useEffect(() => {
+    if (!donorPublicKey && isLoading) return;
+    const fetchHistory = async (donorPublicKey) => {
+      const donationHisory = await fetchDonationHistory(donorPublicKey);
+      setDonationHistory(donationHisory);
+    };
+    fetchHistory(donorPublicKey);
+  }, [donorPublicKey, isLoading]);
+
   return (
     <div>
       <h2>Welcome, {donorName}! Ready to make a difference?</h2>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label>Source Secret Key:</label>
           <input
@@ -67,7 +69,9 @@ const DonorDashboard = () => {
             placeholder="Amount"
           />
         </div>
-        <button type="submit">Send Payment</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Sending..." : "Send Donation"}
+        </button>
       </form>
       <div>
         <h2>Donation History</h2>

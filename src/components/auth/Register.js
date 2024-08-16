@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUserInBlockchain } from "../../utils/stellarSDK/stellarSDK";
+import useSubmitForm from "../../hooks/useSubmitForm";
 
 function Register() {
   const navigate = useNavigate();
@@ -10,8 +11,20 @@ function Register() {
   const [inputPublicKey, setInputPublicKey] = useState("");
   const [role, setRole] = useState("donor"); // or charity
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  const registerUserInLocal = (publicKey) => {
+    // Validation for name, email, password
+    if (!name || !email || !password) {
+      alert("Please fill all the fields");
+      return;
+    }
+    // Add your register logic here
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const newUser = { name, email, password, role, publicKey };
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
+  };
+
+  const handleRegister = async () => {
     if (inputPublicKey) {
       registerUserInLocal(inputPublicKey);
     } else {
@@ -27,23 +40,12 @@ function Register() {
     navigate("/login");
   };
 
-  const registerUserInLocal = (publicKey) => {
-    // Validation for name, email, password
-    if (!name || !email || !password) {
-      alert("Please fill all the fields");
-      return;
-    }
-    // Add your register logic here
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const newUser = { name, email, password, role, publicKey };
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
-  };
+  const { isLoading, handleSubmit } = useSubmitForm(handleRegister);
 
   return (
     <div>
       <h2>Register</h2>
-      <form onSubmit={handleRegister}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Name"
@@ -75,9 +77,13 @@ function Register() {
           value={inputPublicKey}
           onChange={(e) => setInputPublicKey(e.target.value)}
         />
-        <button type="submit">
-          {inputPublicKey ? "Register" : "Register & Create Stellar Account"}
-        </button>
+        {isLoading ? (
+          <button disabled>Loading...</button>
+        ) : (
+          <button type="submit">
+            {inputPublicKey ? "Register" : "Register & Create Stellar Account"}
+          </button>
+        )}
       </form>
     </div>
   );
