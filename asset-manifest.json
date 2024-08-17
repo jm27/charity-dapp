@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/charity-dapp/static/css/main.f08eeb90.css",
+    "main.js": "/charity-dapp/static/js/main.dc9972ee.js",
+    "index.html": "/charity-dapp/index.html",
+    "main.f08eeb90.css.map": "/charity-dapp/static/css/main.f08eeb90.css.map",
+    "main.dc9972ee.js.map": "/charity-dapp/static/js/main.dc9972ee.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f08eeb90.css",
+    "static/js/main.dc9972ee.js"
+  ]
+}
