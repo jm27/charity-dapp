@@ -24,7 +24,22 @@ const DonorDashboard = () => {
       alert("Please enter a valid amount");
       return;
     }
-    await sendPayment(sourceSecretKey, destinationPublicKey, amount);
+    try {
+      const result = await sendPayment(
+        sourceSecretKey,
+        destinationPublicKey,
+        amount
+      );
+      if (result.successful) {
+        alert("Donation sent successfully!");
+      } else {
+        alert(
+          "Error sending donation. Please double check your details. And try again."
+        );
+      }
+    } catch (error) {
+      console.error("Error sending donation:", error);
+    }
   };
 
   const { isLoading, handleSubmit } = useSubmitForm(submitDonation);

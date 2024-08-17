@@ -49,6 +49,7 @@ export const sendPayment = async (
     transaction.sign(sourceKeypair);
     const result = await server.submitTransaction(transaction);
     console.log("Success! Results:", result);
+    return result;
   } catch (e) {
     console.error("An error has occured sending payment", e);
   }
