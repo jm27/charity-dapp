@@ -19,12 +19,21 @@ const CharityDashboard = () => {
   }, [charityPublicKey]);
 
   return (
-    <div>
-      <div>
-        <h2>Hello, {charityName}! Let's make an impact.</h2>
+    <div className="p-6 bg-gray-100 rounded-lg shadow-md">
+      <div className="mb-4">
+        <h2 className="text-2xl font-bold text-gray-900">
+          Hello, {charityName}! Let's make an impact.
+        </h2>
       </div>
-      <Link to="/charity-profile">Edit Profile</Link>
-      <h2>Received Donations</h2>
+      <Link
+        to="/charity-profile"
+        className="text-indigo-600 hover:text-indigo-800 font-medium"
+      >
+        Edit Profile
+      </Link>
+      <h2 className="mt-8 text-xl font-semibold text-gray-900">
+        Received Donations
+      </h2>
       <DonationsList donations={donationHistory} />
     </div>
   );

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUserInBlockchain } from "../../utils/stellarSDK/stellarSDK";
 import useSubmitForm from "../../hooks/useSubmitForm";
+import Wrapper from "../common/Wrapper";
 
 function Register() {
   const navigate = useNavigate();
@@ -43,49 +44,67 @@ function Register() {
   const { isLoading, handleSubmit } = useSubmitForm(handleRegister);
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
+    <Wrapper>
+      <h2 className="text-2xl font-bold text-center text-blue-500 mb-6">
+        Become part of a community dedicated to making a real-world impact!
+      </h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
         />
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
         />
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
+        >
           <option value="donor">Donor</option>
           <option value="charity">Charity</option>
         </select>
-        <p>
-          If you have a public key, enter it here to link it to your account:
+        <p className="text-gray-700">
+          "Already have a public key? Add it here to link it to your account:"
         </p>
         <input
           type="text"
           placeholder="Public Key"
           value={inputPublicKey}
           onChange={(e) => setInputPublicKey(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
         />
         {isLoading ? (
-          <button disabled>Loading...</button>
+          <button
+            disabled
+            className="w-full bg-gray-400 text-white py-2 px-4 rounded cursor-not-allowed"
+          >
+            Loading...
+          </button>
         ) : (
-          <button type="submit">
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+          >
             {inputPublicKey ? "Register" : "Register & Create Stellar Account"}
           </button>
         )}
       </form>
-    </div>
+    </Wrapper>
   );
 }
 

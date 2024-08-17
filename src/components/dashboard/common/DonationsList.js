@@ -28,15 +28,24 @@ const DonationsList = ({ donations }) => {
   }, [donations]);
 
   return (
-    <div>
-      <ul>
+    <div className="p-4 bg-gray-100 rounded-lg shadow-md">
+      <ul className="space-y-2">
         {transactionDetails?.map(
           (transaction, index) =>
             Number(transaction.amount).toFixed(2) > 0 && (
-              <li key={index}>
-                {Number(transaction.amount).toFixed(2)} XLM from{" "}
-                {transaction.from} to {transaction.to} on{" "}
-                {formatDate(transaction.createdAt)} UTC
+              <li
+                key={index}
+                className="p-2 bg-white rounded-lg shadow-sm flex flex-col sm:flex-row justify-between items-center"
+              >
+                <span className="font-semibold text-lg">
+                  {Number(transaction.amount).toFixed(2)} XLM
+                </span>
+                <span className="text-gray-600">
+                  from {transaction.from} to {transaction.to}
+                </span>
+                <span className="text-gray-500 text-sm">
+                  on {formatDate(transaction.createdAt)} UTC
+                </span>
               </li>
             )
         )}

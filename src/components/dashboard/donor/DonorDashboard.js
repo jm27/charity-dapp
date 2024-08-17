@@ -54,42 +54,63 @@ const DonorDashboard = () => {
   }, [donorPublicKey, isLoading]);
 
   return (
-    <div>
-      <h2>Welcome, {donorName}! Ready to make a difference?</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="p-6 bg-gray-100 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        Welcome, {donorName}! Ready to make a difference?
+      </h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label>Source Secret Key:</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Source Secret Key:
+          </label>
           <input
             type="text"
             value={sourceSecretKey}
             onChange={(e) => setSourceSecretKey(e.target.value)}
             placeholder="Source Secret Key"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div>
-          <label>Destination Public Key:</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Destination Public Key:
+          </label>
           <input
             type="text"
             value={destinationPublicKey}
             onChange={(e) => setDestinationPublicKey(e.target.value)}
             placeholder="Destination Public Key"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div>
-          <label>Amount</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Amount
+          </label>
           <input
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Amount"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
-        <button type="submit" disabled={isLoading}>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className={`mt-3 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
+            isLoading
+              ? "bg-gray-400"
+              : "bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          }`}
+        >
           {isLoading ? "Sending..." : "Send Donation"}
         </button>
       </form>
-      <div>
-        <h2>Donation History</h2>
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold text-gray-900">
+          Donation History
+        </h2>
         <DonationsList donations={donationHistory} />
       </div>
     </div>

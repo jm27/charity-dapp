@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Wrapper from "../common/Wrapper";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,24 +25,33 @@ const Login = () => {
   };
 
   return (
-    <div className="login">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
+    <Wrapper>
+      <h2 className="text-2xl font-bold text-center text-blue-500 mb-6">
+        Welcome back! Let’s get back to creating positive impact.
+      </h2>
+      <form onSubmit={handleLogin} className="space-y-4">
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
         />
-        <button type="submit">Login</button>
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+        >
+          Login
+        </button>
       </form>
-    </div>
+    </Wrapper>
   );
 };
 
